@@ -1,0 +1,12 @@
+html{
+    font-family: sans-serif;
+}
+
+img{
+    max-width: 50px;
+}
+
+.title{
+    padding-top: 30px;
+    text-align: center;
+}

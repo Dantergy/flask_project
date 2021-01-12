@@ -25,3 +25,12 @@ def get_todos(user_id):
     This function gets the users todo
      """
     return db.collection('users').document(user_id).collection('todos').get()
+
+def user_put(user_data):
+    """ 
+    This function creates a new user in the DB
+     """
+    user_ref = db.collection('users').document(user_data.username)
+    user_ref.set({
+        'password': user_data.password
+    })

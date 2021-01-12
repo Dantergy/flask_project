@@ -1,9 +1,11 @@
 from flask import render_template, session, flash, url_for, redirect
 from flask_login import login_user, login_required, logout_user, current_user
+from werkzeug.security import generate_password_hash
+
 from app.forms import loginForm
 #import from the present directory
 from . import auth
-from app.firestore_service import get_user
+from app.firestore_service import get_user, user_put
 from app.models import UserData, UserModel
 
 #Create the views
@@ -50,6 +52,42 @@ def login():
         return redirect(url_for('index'))
 
     return render_template('login.html', **parameter)
+
+#Sign up route
+@auth.route('signup', methods=['GET', 'POST'])
+def signup():
+    signup_form = loginForm()
+    parameter = {
+        'signup_form': signup_form
+    }
+
+    #Validate the form
+    if signup_form.validate_on_submit():
+        #Get the data
+        username = signup_form.username.data
+        password = signup_form.password.data
+
+        user_doc = get_user(username)
+
+        #If the user does not exists
+        if user_doc.to_dict() is None:
+            #Hash the password
+            password_hash = generate_password_hash(password)
+            user_data = UserData(username, password_hash)
+            user_put(user_data)
+
+            user = UserModel(user_data)
+            login_user(user)
+
+            flash('Welcome!')
+
+            return redirect(url_for('index'))
+            
+        else:
+            flash('The user already exists.')
+
+    return render_template('signup.html', **parameter)
+
 
 #The decorator login required checks if there is a user logged in 
 @auth.route('logout')

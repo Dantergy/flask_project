@@ -3,13 +3,13 @@
 
 {% block title %}
     {{super()}}
-    Welcome 
+    Sign up 
 {% endblock %}
 
 {% block content %}
-    <h1 class='title'>Login with your account</h1>
+    <h1 class='title'>Create a new account</h1>
     <div class='container'>
-        {{ wtf.quick_form(login_form) }}
+        {{ wtf.quick_form(signup_form) }}
     </div>
 {% endblock %}
 

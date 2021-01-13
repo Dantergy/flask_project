@@ -7,7 +7,7 @@ from flask import Flask, request, make_response, redirect, render_template, sess
 import unittest
 
 #import classes and functions
-from app.forms import loginForm
+from app.forms import TodoForm
 from app import create_app
 from app.firestore_service import get_users, get_todos
 
@@ -53,12 +53,14 @@ def hello():
     #Get the Cookie from the browser
     user_ip = session.get('user_ip')
     username = current_user.id
+    todo_form = TodoForm()
 
     #Save all the parameters
     parameter = {
         'user_ip':user_ip,
         'todos':get_todos(username),
-        'username': username
+        'username': username,
+        'todo_form': todo_form
     }
 
     return render_template('hello.html', **parameter)

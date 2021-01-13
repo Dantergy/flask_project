@@ -1,5 +1,5 @@
 ### Flask_todos 
-It's a portal where the users could have a list of personal todos. 
+It's a portal where the users can have a personal to-do list.
 
 ![](https://raw.githubusercontent.com/Dantergy/flask_todos/master/app/static/img/Screenshot%202021-01-13%20011550.png)
 

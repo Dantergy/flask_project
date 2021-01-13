@@ -13,20 +13,25 @@
     {% endif %}
 
     {% if user_ip %}
-        <h1 class="title">Hello! This is your ip {{user_ip}}</h1>
+        <h3 class="title">Your IP is: {{user_ip}}</h3>
     {% else %} 
         <a href="{{url_for('index')}}">Go Home</a>
     {% endif %}
     
-    <div class='container'>
+    <div class="container">
         <h2>Create a new task</h2>
         {{ wtf.quick_form(todo_form) }}
     </div>
 
-    <ul>
-    {% for todo in todos %}
-        {{macros.render_todo(todo)}}
-    {% endfor %}
+    <ul class="list-group">
+        <div class="row justify-content-center">
+            <div class="col-4">
+                <h3 class="title">Todo list</h3>
+                {% for todo in todos %}
+                    {{macros.render_todo(todo)}}
+                {% endfor %}
+            </div>
+        </div>  
     </ul>
 {% endblock %}
 

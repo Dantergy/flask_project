@@ -9,7 +9,7 @@ import unittest
 #import classes and functions
 from app.forms import TodoForm
 from app import create_app
-from app.firestore_service import get_users, get_todos
+from app.firestore_service import get_users, get_todos, todo_put, delete_todo, update_todo
 
 #Gets the app from the __ini__ file
 app = create_app()
@@ -45,7 +45,7 @@ def index():
 
 #Create a function that return hello world, and a decorator with the function route that specify the route
 #where the app will run
-@app.route('/hi', methods=['GET'])
+@app.route('/hi', methods=['GET', 'POST'])
 
 #Protect the route
 @login_required
@@ -63,5 +63,27 @@ def hello():
         'todo_form': todo_form
     }
 
+    if todo_form.validate_on_submit():
+        todo_put(username, todo_form.description.data)
+
+        flash('Task created sucesfully!')
+
+        return redirect(url_for('hello'))
+
     return render_template('hello.html', **parameter)
 
+#In this route we are using a dinamic route
+@app.route('/todos/delete/<todo_id>', methods=['POST','GET'])
+def delete(todo_id):
+    user_id = current_user.id
+    delete_todo(user_id, todo_id)
+
+    return redirect(url_for('hello'))
+
+#This route we send an int parameter 'done'
+@app.route('/todos/update/<todo_id>/<int:done>', methods=['POST','GET'])
+def update(todo_id, done):
+    user_id = current_user.id
+    update_todo(user_id, todo_id, done)
+
+    return redirect(url_for('hello'))

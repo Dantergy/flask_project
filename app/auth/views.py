@@ -1,6 +1,6 @@
 from flask import render_template, session, flash, url_for, redirect
 from flask_login import login_user, login_required, logout_user, current_user
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 
 from app.forms import loginForm
 #import from the present directory
@@ -35,14 +35,12 @@ def login():
             password_db = user_doc.to_dict()['password']
 
             #If the password coincides with the ones in the DB
-            if password == password_db:
+            if check_password_hash(password_db, password):
                 user_data = UserData(username, password)
                 user = UserModel(user_data)
 
                 login_user(user)
-
                 flash('Nice to see you!')
-
                 redirect(url_for('hello'))
             else:
                 flash('Wrong username/password')
